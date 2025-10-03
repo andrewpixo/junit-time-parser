@@ -4,7 +4,7 @@
   "description": "A command-line utility to parse JUnit XML test results and output test suite information in CSV format",
   "main": "index.js",
   "bin": {
-    "junit-parser": "./index.js"
+    "junit-time-parser": "./index.js"
   },
   "scripts": {
     "start": "node index.js"
