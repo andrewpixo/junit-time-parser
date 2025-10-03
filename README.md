@@ -20,19 +20,20 @@ npm install
 ## Usage
 
 ```bash
-node index.js <directory>
+node index.js <directory> [numWaves]
 ```
 
 Or if installed globally:
 
 ```bash
 npm install -g .
-junit-parser <directory>
+junit-parser <directory> [numWaves]
 ```
 
 ### Arguments
 
 - `<directory>`: Path to the directory containing JUnit XML files
+- `[numWaves]`: (Optional) Number of waves to distribute test suites across. If not provided, defaults to the number of XML files found in the directory.
 
 ### Output Format
 
@@ -40,18 +41,38 @@ The tool outputs CSV format with the following columns:
 - **TestSuite**: Name of the test suite
 - **Tests**: Number of tests in the suite
 - **Runtime**: Total runtime of the test suite in seconds
+- **Wave**: The wave assignment for the test suite (e.g., "wave 1", "wave 2")
 
-### Example
+The tool uses the Longest Processing Time (LPT) algorithm to distribute test suites evenly across waves based on their runtime, ensuring each wave has approximately the same total execution time.
 
+### Examples
+
+#### Basic usage (default wave distribution):
 ```bash
 node index.js ./examples
 ```
 
 Output:
 ```csv
-TestSuite,Tests,Runtime
-My Test Suite,23,15.25
-Another Test Suite,10,5.5
+TestSuite,Tests,Runtime,Wave
+My Test Suite,23,15.25,wave 3
+Another Test Suite,10,5.5,wave 3
+Manage advanced kill sheets,5,126.369,wave 1
+Add special tags to certain purchase loads for reporting,5,118.005,wave 2
+```
+
+#### Specify number of waves:
+```bash
+node index.js ./examples 2
+```
+
+Output:
+```csv
+TestSuite,Tests,Runtime,Wave
+My Test Suite,23,15.25,wave 1
+Another Test Suite,10,5.5,wave 1
+Manage advanced kill sheets,5,126.369,wave 1
+Add special tags to certain purchase loads for reporting,5,118.005,wave 2
 ```
 
 ## JUnit XML Format
