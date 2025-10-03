@@ -8,12 +8,26 @@ This tool scans a directory for JUnit XML files, extracts test suite information
 
 ## Requirements
 
-- Python 3.x (no additional dependencies required)
+- Node.js >= 12.0.0
+- npm (for installing dependencies)
+
+## Installation
+
+```bash
+npm install
+```
 
 ## Usage
 
 ```bash
-python junit_parser.py <directory>
+node index.js <directory>
+```
+
+Or if installed globally:
+
+```bash
+npm install -g .
+junit-parser <directory>
 ```
 
 ### Arguments
@@ -30,7 +44,7 @@ The tool outputs CSV format with the following columns:
 ### Example
 
 ```bash
-python junit_parser.py ./examples
+node index.js ./examples
 ```
 
 Output:
