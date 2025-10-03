@@ -14,7 +14,7 @@ const { DOMParser } = require('@xmldom/xmldom');
  * Parse a JUnit XML file and extract testsuite information.
  * 
  * @param {string} xmlFile - Path to the JUnit XML file
- * @returns {Object|null} Object with keys: name, tests, time, or null if parsing fails
+ * @returns {Array|null} Array of objects with keys: name, tests, time, or null if parsing fails
  */
 function parseJunitXml(xmlFile) {
     try {
@@ -23,32 +23,32 @@ function parseJunitXml(xmlFile) {
         const doc = parser.parseFromString(xmlContent, 'text/xml');
         
         // Handle both testsuite and testsuites root elements
-        let testsuite = null;
+        const results = [];
         const root = doc.documentElement;
         
         if (root.tagName === 'testsuite') {
-            testsuite = root;
+            // Single testsuite as root
+            const name = root.getAttribute('name') || 'Unknown';
+            const tests = root.getAttribute('tests') || '0';
+            const time = root.getAttribute('time') || '0';
+            results.push({ name, tests, time });
         } else if (root.tagName === 'testsuites') {
-            // If testsuites is the root, find the first testsuite
+            // Multiple testsuites - extract all of them
             const testsuites = root.getElementsByTagName('testsuite');
-            if (testsuites.length > 0) {
-                testsuite = testsuites[0];
+            for (let i = 0; i < testsuites.length; i++) {
+                const testsuite = testsuites[i];
+                const name = testsuite.getAttribute('name') || 'Unknown';
+                const tests = testsuite.getAttribute('tests') || '0';
+                const time = testsuite.getAttribute('time') || '0';
+                results.push({ name, tests, time });
             }
         }
         
-        if (!testsuite) {
+        if (results.length === 0) {
             return null;
         }
         
-        const name = testsuite.getAttribute('name') || 'Unknown';
-        const tests = testsuite.getAttribute('tests') || '0';
-        const time = testsuite.getAttribute('time') || '0';
-        
-        return {
-            name: name,
-            tests: tests,
-            time: time
-        };
+        return results;
     } catch (error) {
         console.error(`Error parsing ${xmlFile}: ${error.message}`);
         return null;
@@ -112,9 +112,11 @@ function main() {
     
     // Parse each XML file and output CSV rows
     xmlFiles.sort().forEach(xmlFile => {
-        const data = parseJunitXml(xmlFile);
-        if (data) {
-            console.log(`${data.name},${data.tests},${data.time}`);
+        const testsuites = parseJunitXml(xmlFile);
+        if (testsuites) {
+            testsuites.forEach(data => {
+                console.log(`${data.name},${data.tests},${data.time}`);
+            });
         }
     });
 }
