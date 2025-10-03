@@ -173,11 +173,13 @@ function main() {
     distributeToWaves(allTestSuites, numWaves);
     
     // Print CSV header
-    console.log('TestSuite,Tests,Runtime,Wave');
+    console.log('TestSuite|Tests|Runtime|Wave');
     
     // Output CSV rows
-    allTestSuites.forEach(data => {
-        console.log(`${data.name},${data.tests},${data.time},${data.wave}`);
+    allTestSuites
+        .filter(data => data.tests > 0)
+        .forEach(data => {
+        console.log(`'${data.name}'|'${data.tests}'|'${data.time}'|'${data.wave}'`);
     });
 }
 
