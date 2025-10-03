@@ -1,0 +1,27 @@
+{
+  "name": "junit-time-parser",
+  "version": "1.0.0",
+  "description": "A command-line utility to parse JUnit XML test results and output test suite information in CSV format",
+  "main": "index.js",
+  "bin": {
+    "junit-parser": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "junit",
+    "xml",
+    "parser",
+    "cli",
+    "testing"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "dependencies": {
+    "@xmldom/xmldom": "^0.8.10"
+  }
+}
